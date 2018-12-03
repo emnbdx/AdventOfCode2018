@@ -28,7 +28,6 @@ namespace AdventOfCode2018
 
         private string GetDouble(int count = 0)
         {
-            Console.WriteLine("pass");
             foreach (var i in data)
             {
                 count += i;
