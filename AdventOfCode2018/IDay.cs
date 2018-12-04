@@ -1,5 +1,4 @@
-﻿using System;
-namespace AdventOfCode2018
+﻿namespace AdventOfCode2018
 {
     public interface IDay
     {

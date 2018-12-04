@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,39 +6,40 @@ namespace AdventOfCode2018
 {
     public class Day1 : IDay
     {
-        public List<int> data = new List<int>();
-        private List<int> oldFrequency = new List<int>();
+        private readonly List<int> _data;
+        private readonly List<int> _oldFrequency = new List<int>();
 
         public Day1()
         {
-            data = File.ReadAllLines("data/day1").Select(_ => int.Parse(_)).ToList();
+            _data = File.ReadAllLines(Path.Combine("data", "day1")).Select(int.Parse).ToList();
         }
 
         public string Part1()
         {
-            return data.Sum().ToString();
+            return _data.Sum().ToString();
         }
 
         public string Part2()
         {
-            oldFrequency.Add(0);
+            _oldFrequency.Add(0);
             return GetDouble();
         }
 
         private string GetDouble(int count = 0)
         {
-            foreach (var i in data)
+            while (true)
             {
-                count += i;
-                if (oldFrequency.Contains(count))
+                foreach (var i in _data)
                 {
-                    return count.ToString();
+                    count += i;
+                    if (_oldFrequency.Contains(count))
+                    {
+                        return count.ToString();
+                    }
+
+                    _oldFrequency.Add(count);
                 }
-
-                oldFrequency.Add(count);
             }
-
-            return GetDouble(count);
         }
     }
 }
