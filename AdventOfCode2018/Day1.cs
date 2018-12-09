@@ -1,26 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode2018
 {
-    public class Day1 : IDay
+    public class Day1 : AbstractDay
     {
-        public List<int> data = new List<int>();
         private List<int> oldFrequency = new List<int>();
 
-        public Day1()
+        public Day1() : base(1)
+        { }
+
+        public override string Part1()
         {
-            data = File.ReadAllLines("data/day1").Select(_ => int.Parse(_)).ToList();
+            return data.Select(_ => int.Parse(_)).Sum().ToString();
         }
 
-        public string Part1()
-        {
-            return data.Sum().ToString();
-        }
-
-        public string Part2()
+        public override string Part2()
         {
             oldFrequency.Add(0);
             return GetDouble();
@@ -28,7 +23,7 @@ namespace AdventOfCode2018
 
         private string GetDouble(int count = 0)
         {
-            foreach (var i in data)
+            foreach (var i in data.Select(_ => int.Parse(_)))
             {
                 count += i;
                 if (oldFrequency.Contains(count))

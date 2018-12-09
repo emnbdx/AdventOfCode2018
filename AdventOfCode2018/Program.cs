@@ -6,9 +6,9 @@ namespace AdventOfCode2018
     {
         static void Main(string[] args)
         {
-            var day1 = new Day1();
-            Console.WriteLine(day1.Part1());
-            Console.WriteLine(day1.Part2());
+            //new Day1();
+            //new Day2();
+            new Day3();
         }
     }
 }
