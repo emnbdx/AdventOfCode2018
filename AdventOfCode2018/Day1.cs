@@ -5,10 +5,11 @@ namespace AdventOfCode2018
 {
     public class Day1 : AbstractDay
     {
-        private List<int> oldFrequency = new List<int>();
+        private readonly List<int> oldFrequency = new List<int>();
 
         public Day1() : base(1)
         { }
+
 
         public override string Part1()
         {
@@ -23,18 +24,19 @@ namespace AdventOfCode2018
 
         private string GetDouble(int count = 0)
         {
-            foreach (var i in data.Select(_ => int.Parse(_)))
+            while(true)
             {
-                count += i;
-                if (oldFrequency.Contains(count))
+                foreach (var i in data.Select(_ => int.Parse(_)))
                 {
-                    return count.ToString();
+                    count += i;
+                    if (oldFrequency.Contains(count))
+                    {
+                        return count.ToString();
+                    }
+
+                    oldFrequency.Add(count);
                 }
-
-                oldFrequency.Add(count);
             }
-
-            return GetDouble(count);
         }
     }
 }

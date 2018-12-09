@@ -11,7 +11,7 @@ namespace AdventOfCode2018
 
         internal AbstractDay(int dayCount)
         {
-            data = File.ReadAllLines($"data/day{dayCount}").ToList();
+            data = File.ReadAllLines(Path.Combine("data", $"day{dayCount}")).ToList();
 
             Console.WriteLine($"Day {dayCount} part 1 result: {Part1()}");
             Console.WriteLine($"Day {dayCount} part 2 result: {Part2()}");

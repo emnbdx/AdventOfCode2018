@@ -8,4 +8,13 @@
   <ItemGroup>
     <Folder Include="data\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <None Update="data\day1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="IDay.cs" />
+  </ItemGroup>
 </Project>

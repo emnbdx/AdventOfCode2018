@@ -34,7 +34,7 @@ namespace AdventOfCode2018
 
         public Rectangle(string line)
         {
-
+            var lineParts = line.Split(' ');
         }
     }
 }
