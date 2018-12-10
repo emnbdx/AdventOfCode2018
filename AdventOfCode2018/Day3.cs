@@ -15,18 +15,68 @@ namespace AdventOfCode2018
 
         public override string Part1()
         {
-            var area = 0;
-            foreach(var rectangle in Rectangles)
-            {
-                area += rectangle.W * rectangle.H;
-            }
+            int[,] array = DrawRectangles();
 
-            return ((1000 * 1000) - area).ToString();
+            return CountOverlap(array).ToString();
         }
 
         public override string Part2()
         {
-            throw new NotImplementedException();
+            int[,] array = DrawRectangles();
+
+            foreach (var rectangle in Rectangles)
+            {
+                var overlap = false;
+                for (var x = 0; x < rectangle.W; x++)
+                {
+                    for (var y = 0; y < rectangle.H; y++)
+                    {
+                        if(array[rectangle.X + x, rectangle.Y + y] > 1)
+                        {
+                            overlap = true;
+                        }
+                    }
+                }
+
+                if (!overlap)
+                    return rectangle.Id.ToString();
+            }
+
+            return null;
+        }
+
+        private int[,] DrawRectangles()
+        {
+            int[,] array = new int[1000, 1000];
+            foreach (var rectangle in Rectangles)
+            {
+                for (var x = 0; x < rectangle.W; x++)
+                {
+                    for (var y = 0; y < rectangle.H; y++)
+                    {
+                        array[rectangle.X + x, rectangle.Y + y]++;
+                    }
+                }
+            }
+
+            return array;
+        }
+
+        private int CountOverlap(int[,] array) 
+        {
+            var overlap = 0;
+            for (var x = 0; x < 1000; x++)
+            {
+                for (var y = 0; y < 1000; y++)
+                {
+                    if (array[x, y] > 1)
+                    {
+                        overlap++;
+                    }
+                }
+            }
+
+            return overlap;
         }
     }
 
