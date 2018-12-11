@@ -2,44 +2,80 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2018
 {
     public class Day4 : AbstractDay
     {
-        private readonly Dictionary<DateTime, string> _comportements = new Dictionary<DateTime, string>();
+        private Dictionary<int, Guard> _guards;
+        public static Regex LineRegex = new Regex(@"\[(\d+-\d+-\d+\s\d+:\d+)\]\s(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        public static Regex IdREegex = new Regex(@"Guard\s#(\d+)\s.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public Day4() : base(4)
         {
+            Dictionary<DateTime, string> comportements = new Dictionary<DateTime, string>();
             foreach(var line in Data)
             {
+                var result = LineRegex.Match(line);
+
                 var parts = line.Split(']');
-                _comportements.Add(DateTime.ParseExact(parts[0].Replace("[", ""), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), parts[1].Trim());
+                comportements.Add(DateTime.ParseExact(result.Groups[1].Value, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), result.Groups[2].Value.Trim());
             }
+
+            InitGuard(comportements);
         }
 
         public override string Part1()
         {
-            var guards = new Dictionary<int, Guard>();
-            foreach(var comportement in _comportements.OrderBy(_ => _.Key))
-            {
-                if (comportement.Value.StartsWith("Guard"))
-                {
-                    var id = int.Parse(comportement.Value.Split(' ')[1].Replace("#", ""));
+            var sleepyBoy = _guards.Values.OrderByDescending(_ => _.SleepTime).First();
+            var favoriteMinute = sleepyBoy.GetFavoriteMinute().minute;
 
-                    if (!guards.ContainsKey(id))
-                    {
-                        guards.Add(id, new Guard(id));
-                    }
-                }
-            }
-
-            return null;
+            return (sleepyBoy.Id * favoriteMinute).ToString();
         }
 
         public override string Part2()
         {
-            throw new NotImplementedException();
+            var sleepyBoy = _guards.Values.OrderByDescending(_ => _.GetFavoriteMinute().count).First();
+            var favoriteMinute = sleepyBoy.GetFavoriteMinute().minute;
+
+            return (sleepyBoy.Id * favoriteMinute).ToString();
+        }
+
+        private void InitGuard(Dictionary<DateTime, string> comportements)
+        {
+            _guards = new Dictionary<int, Guard>();
+            var currentId = 0;
+            var startDate = DateTime.MinValue;
+            var endDate = DateTime.MinValue;
+            foreach (var comportement in comportements.OrderBy(_ => _.Key))
+            {
+                var match = IdREegex.Match(comportement.Value);
+
+                if (match.Success)
+                {
+                    currentId = int.Parse(match.Groups[1].Value);
+
+                    if (!_guards.ContainsKey(currentId))
+                    {
+                        _guards.Add(currentId, new Guard(currentId));
+                    }
+                }
+
+                if (comportement.Value == "falls asleep")
+                {
+                    startDate = comportement.Key;
+                    continue;
+                }
+
+                if (comportement.Value == "wakes up")
+                {
+                    endDate = comportement.Key;
+
+                    _guards[currentId].AddSleepPeriod(startDate, endDate);
+                    continue;
+                }
+            }
         }
     }
 
@@ -47,16 +83,49 @@ namespace AdventOfCode2018
     {
         public int Id { get; }
         public int SleepTime { get; private set; }
+        public List<SleepPeriod> SleepPeriods { get; private set; }
 
         public Guard(int id)
         {
             Id = id;
             SleepTime = 0;
+            SleepPeriods = new List<SleepPeriod>();
         }
 
-        public void AddSleepTime(int time)
+        public void AddSleepPeriod(DateTime startDate, DateTime endDate)
         {
-            SleepTime += time;
+            SleepPeriods.Add(new SleepPeriod(startDate, endDate));
+            SleepTime += (endDate - startDate).Minutes;
+        }
+
+        public (int minute, int count) GetFavoriteMinute()
+        {
+            var minutes = new int[60];
+            foreach(var sleepPeriod in SleepPeriods)
+            {
+                var tempDate = sleepPeriod.StartDate;
+                while(tempDate < sleepPeriod.EndDate)
+                {
+                    minutes[tempDate.Minute]++;
+                    tempDate = tempDate.AddMinutes(1);
+                }
+
+            }
+
+            int maxValue = minutes.Max();
+            return (minutes.ToList().IndexOf(maxValue), maxValue);
+        }
+    }
+
+    public class SleepPeriod
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+
+        public SleepPeriod(DateTime startDate, DateTime endDate)
+        {
+            StartDate = startDate;
+            EndDate = endDate;
         }
     }
 }

@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2018
 {
     public class Day3 : AbstractDay
     {
-        public List<Rectangle> Rectangles;
+        private readonly List<Rectangle> _rectangles;
+        private static Regex Regex = new Regex(@"#(\d+)\s@\s(\d+),(\d+):\s(\d+)x(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public Day3() : base(3)
         {
-            Rectangles = Data.Select(_ => new Rectangle(_)).ToList();
+            _rectangles = Data.Select(_ => new Rectangle(_)).ToList();
         }
 
         public override string Part1()
@@ -23,14 +25,14 @@ namespace AdventOfCode2018
         {
             var array = DrawRectangles();
 
-            foreach (var rectangle in Rectangles)
+            foreach (var rectangle in _rectangles)
             {
                 var overlap = false;
                 for (var x = 0; x < rectangle.W; x++)
                 {
                     for (var y = 0; y < rectangle.H; y++)
                     {
-                        if(array[rectangle.X + x, rectangle.Y + y] > 1)
+                        if (array[rectangle.X + x, rectangle.Y + y] > 1)
                         {
                             overlap = true;
                         }
@@ -47,7 +49,7 @@ namespace AdventOfCode2018
         private int[,] DrawRectangles()
         {
             var array = new int[1000, 1000];
-            foreach (var rectangle in Rectangles)
+            foreach (var rectangle in _rectangles)
             {
                 for (var x = 0; x < rectangle.W; x++)
                 {
@@ -61,7 +63,7 @@ namespace AdventOfCode2018
             return array;
         }
 
-        private int CountOverlap(int[,] array) 
+        private int CountOverlap(int[,] array)
         {
             var overlap = 0;
             for (var x = 0; x < 1000; x++)
@@ -77,26 +79,24 @@ namespace AdventOfCode2018
 
             return overlap;
         }
-    }
 
-    public class Rectangle
-    {
-        public int Id { get; }
-        public int X { get; }
-        public int Y { get; }
-        public int W { get; }
-        public int H { get; }
-
-        public Rectangle(string line)
+        public class Rectangle
         {
-            var lineParts = line.Split(' ');
-            Id = int.Parse(lineParts[0].Replace("#", ""));
-            var xy = lineParts[2].Replace(":", "").Split(',');
-            X = int.Parse(xy[0]);
-            Y = int.Parse(xy[1]);
-            var wh = lineParts[3].Split('x');
-            W = int.Parse(wh[0]);
-            H = int.Parse(wh[1]);
+            public int Id { get; }
+            public int X { get; }
+            public int Y { get; }
+            public int W { get; }
+            public int H { get; }
+
+            public Rectangle(string line)
+            {
+                var result = Regex.Match(line);
+                Id = int.Parse(result.Groups[1].Value);
+                X = int.Parse(result.Groups[2].Value);
+                Y = int.Parse(result.Groups[3].Value);
+                W = int.Parse(result.Groups[4].Value);
+                H = int.Parse(result.Groups[5].Value);
+            }
         }
     }
 }
