@@ -7,21 +7,21 @@ namespace AdventOfCode2018
 {
     public class Day4 : AbstractDay
     {
-        private Dictionary<DateTime, string> comportements = new Dictionary<DateTime, string>();
+        private readonly Dictionary<DateTime, string> _comportements = new Dictionary<DateTime, string>();
 
         public Day4() : base(4)
         {
-            foreach(var line in data)
+            foreach(var line in Data)
             {
                 var parts = line.Split(']');
-                comportements.Add(DateTime.ParseExact(parts[0].Replace("[", ""), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), parts[1].Trim());
+                _comportements.Add(DateTime.ParseExact(parts[0].Replace("[", ""), "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), parts[1].Trim());
             }
         }
 
         public override string Part1()
         {
             var guards = new Dictionary<int, Guard>();
-            foreach(var comportement in comportements.OrderBy(_ => _.Key))
+            foreach(var comportement in _comportements.OrderBy(_ => _.Key))
             {
                 if (comportement.Value.StartsWith("Guard"))
                 {

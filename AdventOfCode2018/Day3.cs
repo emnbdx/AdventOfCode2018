@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode2018
 {
     public class Day3 : AbstractDay
     {
-        public List<Rectangle> Rectangles = new List<Rectangle>();
+        public List<Rectangle> Rectangles;
 
         public Day3() : base(3)
         {
-            Rectangles = data.Select(_ => new Rectangle(_)).ToList();
+            Rectangles = Data.Select(_ => new Rectangle(_)).ToList();
         }
 
         public override string Part1()
         {
-            int[,] array = DrawRectangles();
+            var array = DrawRectangles();
 
             return CountOverlap(array).ToString();
         }
 
         public override string Part2()
         {
-            int[,] array = DrawRectangles();
+            var array = DrawRectangles();
 
             foreach (var rectangle in Rectangles)
             {
@@ -47,7 +46,7 @@ namespace AdventOfCode2018
 
         private int[,] DrawRectangles()
         {
-            int[,] array = new int[1000, 1000];
+            var array = new int[1000, 1000];
             foreach (var rectangle in Rectangles)
             {
                 for (var x = 0; x < rectangle.W; x++)

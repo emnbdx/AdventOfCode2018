@@ -11,9 +11,9 @@ namespace AdventOfCode2018
         {
             var repeat2 = 0;
             var repeat3 = 0;
-            foreach (var word in data)
+            foreach (var word in Data)
             {
-                var groupedChar = word.ToCharArray().GroupBy(_ => _).Select(_ => _.Count());
+                var groupedChar = word.ToCharArray().GroupBy(_ => _).Select(_ => _.Count()).ToList();
 
                 if (groupedChar.Any(_ => _ == 2))
                     repeat2++;
@@ -28,23 +28,19 @@ namespace AdventOfCode2018
         public override string Part2()
         {
             var result = "";
-            foreach(var word in data)
+            foreach(var word in Data)
             {
-                var wordChar = word.ToCharArray();
-
-                foreach (var otherWord in data)
+                foreach (var otherWord in Data)
                 {
                     if (word == otherWord)
                         continue;
 
-                    otherWord.ToCharArray();
-
                     // assume each word as same char count in same order   
                     var differCount = 0;
                     var differPos = 0;
-                    for (var i = 0; i < wordChar.Length; i++)
+                    for (var i = 0; i < word.Length; i++)
                     {
-                        if (wordChar[i] != otherWord[i])
+                        if (word[i] != otherWord[i])
                         {
                             differCount++;
                             differPos = i;

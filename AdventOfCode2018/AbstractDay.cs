@@ -8,12 +8,12 @@ namespace AdventOfCode2018
     public abstract class AbstractDay
     {
         internal int DayCount;
-        internal List<string> data = new List<string>();
+        internal List<string> Data;
 
         internal AbstractDay(int dayCount)
         {
             DayCount = dayCount;
-            data = File.ReadAllLines(Path.Combine("data", $"day{dayCount}")).ToList();
+            Data = File.ReadAllLines(Path.Combine("data", $"day{dayCount}")).ToList();
         }
 
         public void Compute()
