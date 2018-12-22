@@ -7,7 +7,7 @@ namespace AdventOfCode2018
     public class Day3 : AbstractDay
     {
         private readonly List<Rectangle> _rectangles;
-        private static Regex Regex = new Regex(@"#(\d+)\s@\s(\d+),(\d+):\s(\d+)x(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex Regex = new Regex(@"#(\d+)\s@\s(\d+),(\d+):\s(\d+)x(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public Day3() : base(3)
         {

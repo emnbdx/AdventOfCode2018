@@ -9,8 +9,8 @@ namespace AdventOfCode2018
     public class Day4 : AbstractDay
     {
         private Dictionary<int, Guard> _guards;
-        public static Regex LineRegex = new Regex(@"\[(\d+-\d+-\d+\s\d+:\d+)\]\s(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        public static Regex IdREegex = new Regex(@"Guard\s#(\d+)\s.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex LineRegex = new Regex(@"\[(\d+-\d+-\d+\s\d+:\d+)\]\s(.*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex IdREegex = new Regex(@"Guard\s#(\d+)\s.*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         public Day4() : base(4)
         {
@@ -19,7 +19,6 @@ namespace AdventOfCode2018
             {
                 var result = LineRegex.Match(line);
 
-                var parts = line.Split(']');
                 comportements.Add(DateTime.ParseExact(result.Groups[1].Value, "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), result.Groups[2].Value.Trim());
             }
 
@@ -47,7 +46,6 @@ namespace AdventOfCode2018
             _guards = new Dictionary<int, Guard>();
             var currentId = 0;
             var startDate = DateTime.MinValue;
-            var endDate = DateTime.MinValue;
             foreach (var comportement in comportements.OrderBy(_ => _.Key))
             {
                 var match = IdREegex.Match(comportement.Value);
@@ -70,10 +68,9 @@ namespace AdventOfCode2018
 
                 if (comportement.Value == "wakes up")
                 {
-                    endDate = comportement.Key;
+                    var endDate = comportement.Key;
 
                     _guards[currentId].AddSleepPeriod(startDate, endDate);
-                    continue;
                 }
             }
         }
@@ -83,7 +80,7 @@ namespace AdventOfCode2018
     {
         public int Id { get; }
         public int SleepTime { get; private set; }
-        public List<SleepPeriod> SleepPeriods { get; private set; }
+        public List<SleepPeriod> SleepPeriods { get; }
 
         public Guard(int id)
         {

@@ -11,7 +11,7 @@ namespace AdventOfCode2018
         public override string Part1()
         {
             var polymer = Data.First();
-            var reactedPolymer = string.Empty;
+            string reactedPolymer;
 
             while (true)
             {
@@ -34,11 +34,9 @@ namespace AdventOfCode2018
             {
                 var cleanedPolymer = Data.First().Replace($"{letter}", "").Replace($"{char.ToUpper(letter)}", "");
 
-                var reactedPolymer = string.Empty;
-
                 while (true)
                 {
-                    reactedPolymer = ReactPolymer(cleanedPolymer);
+                    var reactedPolymer = ReactPolymer(cleanedPolymer);
                     if (reactedPolymer == cleanedPolymer)
                         break;
 

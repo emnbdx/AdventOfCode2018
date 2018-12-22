@@ -20,6 +20,7 @@ namespace AdventOfCode2018
         {
             Console.WriteLine($"Day {DayCount} part 1 result: {Part1()}");
             Console.WriteLine($"Day {DayCount} part 2 result: {Part2()}");
+            Console.ReadKey();
         }
 
         public abstract string Part1();
